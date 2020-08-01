@@ -1,4 +1,6 @@
 # stmhelper
 Helper functions for the R package stm.
 
-Most functions in this package are intended to easier the selection and labelling of topic models build with the stm package. 
+Most functions are focused on plots and tools for model selection and labeling.
+
+Since this is not a R proper package (it will be in the near future), use every function at your own risk.
