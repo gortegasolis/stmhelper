@@ -5,7 +5,7 @@ MultiSearchK <- function(data,
                          list_searchK = NULL,
                          times = 10,
                          from = 2,
-                         to = 100,
+                         to = 50,
                          by = 10,
                          init.type = "Spectral",
                          ncores = 1){
