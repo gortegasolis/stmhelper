@@ -7,7 +7,7 @@ ggtopics_word <- function(model,
                           show.legend = FALSE,
                           words_size = 3,
                           words_family = "IBMPlexSans",
-                          col.int = "red"){
+                          col.int = "red") {
   # tidytext::tidy(model,
   #                matrix = "beta") %>%
   #   arrange(beta) %>%
@@ -20,24 +20,25 @@ ggtopics_word <- function(model,
   #   unique()->   top_terms
 
   tidytext::tidy(model,
-                 matrix = "gamma") %>%
-    select(topic,gamma) %>%
+    matrix = "gamma"
+  ) %>%
+    select(topic, gamma) %>%
     group_by(topic) %>%
-    mutate_at(.,"gamma", ~mean(gamma)) %>%
+    mutate_at(., "gamma", ~ mean(gamma)) %>%
     unique() %>%
     arrange(desc(gamma)) %>%
     as.data.frame() %>%
-    mutate(.,topic = as.factor(topic)) %>%
-    left_join(., topic_labels$label_words, by = "topic")  -> gamma_terms
+    mutate(., topic = as.factor(topic)) %>%
+    left_join(., topic_labels$label_words, by = "topic") -> gamma_terms
 
-  if(is.null(interest_words) == FALSE){
+  if (is.null(interest_words) == FALSE) {
     tidytext::tidy(model) %>%
       filter(term %in% interest_words) %>%
-      select(topic,beta) %>%
+      select(topic, beta) %>%
       group_by(topic) %>%
-      mutate_at(.,"int_beta" = sum(beta)) %>%
-      mutate(.,topic = as.factor(topic)) %>%
-      left_join(gamma_terms,., by = "topic") -> gamma_terms
+      mutate_at(., "int_beta" = sum(beta)) %>%
+      mutate(., topic = as.factor(topic)) %>%
+      left_join(gamma_terms, ., by = "topic") -> gamma_terms
   }
 
   gamma_terms$topic <- paste0("Topic ", gamma_terms$topic)
@@ -45,31 +46,39 @@ ggtopics_word <- function(model,
   gamma_terms %>%
     left_join(., topic_labels, by = "topic") -> gamma_terms
 
-  if(is.null(head_and_tail) == FALSE){gamma_terms<-gamma_terms[head_and_tail,]}
-
-  if(is.null(interest_words) == FALSE)
-  {## Interest_words TRUE
-    gamma_terms %>%
-      ggplot(.,aes(reorder(New_label,gamma), gamma, label = term)) +
-      geom_col(fill = color,
-               show.legend = show.legend) +
-      geom_col(aes(y = int_beta*gamma),
-               fill = col.int,
-               show.legend = FALSE) +
-      geom_text(hjust = 0, nudge_y = 0.0005,
-                size = words_size,
-                family = words_family) +
-      coord_flip()}
-  else{## Interest_words FALSE
-    gamma_terms %>%
-      ggplot(.,aes(reorder(New_label,gamma), gamma, label = term)) +
-      geom_col(fill = color,
-               show.legend = show.legend) +
-      geom_text(hjust = 0, nudge_y = 0.0005,
-                size = words_size,
-                family = words_family) +
-      coord_flip()
+  if (is.null(head_and_tail) == FALSE) {
+    gamma_terms <- gamma_terms[head_and_tail, ]
   }
 
-
+  if (is.null(interest_words) == FALSE) { ## Interest_words TRUE
+    gamma_terms %>%
+      ggplot(., aes(reorder(New_label, gamma), gamma, label = term)) +
+      geom_col(
+        fill = color,
+        show.legend = show.legend
+      ) +
+      geom_col(aes(y = int_beta * gamma),
+        fill = col.int,
+        show.legend = FALSE
+      ) +
+      geom_text(
+        hjust = 0, nudge_y = 0.0005,
+        size = words_size,
+        family = words_family
+      ) +
+      coord_flip()
+  } else { ## Interest_words FALSE
+    gamma_terms %>%
+      ggplot(., aes(reorder(New_label, gamma), gamma, label = term)) +
+      geom_col(
+        fill = color,
+        show.legend = show.legend
+      ) +
+      geom_text(
+        hjust = 0, nudge_y = 0.0005,
+        size = words_size,
+        family = words_family
+      ) +
+      coord_flip()
+  }
 }
