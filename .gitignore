@@ -2,3 +2,21 @@
 .Rhistory
 .RData
 .Ruserdata
+
+#Lista personal
+*.xls
+*.xlsx
+*.doc
+*.docx
+*.ods
+*.odt
+*.pdf
+*.zip
+*.tif
+*.tiff
+*.shp
+*.dbf
+*.shx
+*.rds
+*.stversion
+*.sync-*
